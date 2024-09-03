@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { of, combineLatest } from 'rxjs';
+import { of, combineLatest, Observable } from 'rxjs';
 import { catchError, debounceTime, filter, map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,6 +15,8 @@ export class SearchComponent {
   loadingCombined = false;
   errorSearch: string | null = null;
   errorCombined: string | null = null;
+
+  private candies = ['Chocolate', 'Gummy Bears', 'Lollipop', 'Candy Cane', 'Jelly Beans'];
 
   constructor(private http: HttpClient) {}
 
@@ -61,10 +63,19 @@ export class SearchComponent {
     });
   }
 
-  private simulateApiCall(term: string) {
-    return of([`Results for ${term}`]).pipe(
+  private simulateApiCall(term: string): Observable<string[]> {
+    return of(this.candies.filter(candy => candy.toLowerCase().includes(term.toLowerCase()))).pipe(
       tap(() => console.log(`API call for: ${term}`)),
-      debounceTime(500)
+      debounceTime(500),
+      map(results => {
+        if (results.length === 0) {
+          throw new Error('No results found');
+        }
+        return results;
+      }),
+      catchError(() => {
+        return of(['No results found']); 
+      })
     );
   }
 }
