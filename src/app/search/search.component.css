@@ -1,21 +1,11 @@
-/* Centering the container in the middle of the page */
-html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f4f8; /* A soft blue-gray background color */
-    font-family: 'Arial', sans-serif;
-  }
+
   
   .container {
     width: 50%;
     /* max-width: 800px; */
-    padding: 4rem;
-    margin-top: 200px;
-    margin-left: 500px;
-    background-color: #ffffff; /* Keep the container white for readability */
+    padding: 2rem;
+    
+    background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
