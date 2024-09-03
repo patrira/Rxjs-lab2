@@ -11,8 +11,8 @@
         class="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <p *ngIf="loadingSearch" class="text-blue-500 mt-2">Searching...</p>
-      <ul *ngIf="searchResults?.length" class="list-disc pl-6 mt-4">
-        <li *ngFor="let result of searchResults" class="text-gray-700">{{ result }}</li>
+      <ul class="list-disc pl-6 mt-4">
+        <li *ngFor="let result of persistentSearchResults" class="text-gray-700">{{ result }}</li>
       </ul>
       <p *ngIf="errorSearch" class="text-red-500 mt-2">{{ errorSearch }}</p>
     </div>
@@ -26,13 +26,15 @@
         Fetch User Details and Posts
       </button>
       <p *ngIf="loadingCombined" class="text-blue-500 mt-4">Loading combined data...</p>
-      <div *ngIf="combinedData" class="mt-6">
-        <h2 class="text-xl font-semibold text-gray-800">User Details:</h2>
-        <p class="text-gray-700">{{ combinedData.userDetails }}</p>
-        <h2 class="text-xl font-semibold text-gray-800 mt-4">User Posts:</h2>
-        <ul class="list-disc pl-6">
-          <li *ngFor="let post of combinedData.userPosts" class="text-gray-700">{{ post }}</li>
-        </ul>
+      <div *ngIf="combinedData.length" class="mt-6">
+        <div *ngFor="let data of combinedData" class="mb-6">
+          <h2 class="text-xl font-semibold text-gray-800">User Details:</h2>
+          <p class="text-gray-700">{{ data.userDetails }}</p>
+          <h2 class="text-xl font-semibold text-gray-800 mt-4">User Posts:</h2>
+          <ul class="list-disc pl-6">
+            <li *ngFor="let post of data.userPosts" class="text-gray-700">{{ post }}</li>
+          </ul>
+        </div>
       </div>
       <p *ngIf="errorCombined" class="text-red-500 mt-2">{{ errorCombined }}</p>
     </div>
