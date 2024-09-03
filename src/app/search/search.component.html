@@ -23,12 +23,16 @@
         (click)="fetchCombinedData()"
         class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-300"
       >
-        Fetch Combined Data
+        Fetch User Details and Posts
       </button>
       <p *ngIf="loadingCombined" class="text-blue-500 mt-4">Loading combined data...</p>
       <div *ngIf="combinedData" class="mt-6">
-        <h2 class="text-xl font-semibold text-gray-800">Combined Data:</h2>
-        <p class="text-gray-700">{{ combinedData }}</p>
+        <h2 class="text-xl font-semibold text-gray-800">User Details:</h2>
+        <p class="text-gray-700">{{ combinedData.userDetails }}</p>
+        <h2 class="text-xl font-semibold text-gray-800 mt-4">User Posts:</h2>
+        <ul class="list-disc pl-6">
+          <li *ngFor="let post of combinedData.userPosts" class="text-gray-700">{{ post }}</li>
+        </ul>
       </div>
       <p *ngIf="errorCombined" class="text-red-500 mt-2">{{ errorCombined }}</p>
     </div>

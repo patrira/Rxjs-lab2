@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { of, combineLatest, Observable } from 'rxjs';
+import { of, combineLatest } from 'rxjs';
 import { catchError, debounceTime, filter, map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,13 +10,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SearchComponent {
   searchResults: string[] = [];
-  combinedData: string | null = null;
+  combinedData: { userDetails: string; userPosts: string[] } | null = null;
   loadingSearch = false;
   loadingCombined = false;
   errorSearch: string | null = null;
   errorCombined: string | null = null;
 
-  private candies = ['Chocolate', 'Gummy Bears', 'Lollipop', 'Candy Cane', 'Jelly Beans'];
+  // Simulated candies array
+  private candies = ['Chocolate', 'Gummy Bears', 'Lollipop', 'Candy Cane', 'Toffee'];
 
   constructor(private http: HttpClient) {}
 
@@ -32,11 +33,12 @@ export class SearchComponent {
         this.errorSearch = null;
         this.searchResults = [];
       }),
-      switchMap(searchTerm => 
-        this.simulateApiCall(searchTerm).pipe(
+      map(searchTerm => this.candies.filter(candy => candy.toLowerCase().includes(searchTerm.toLowerCase()))),
+      switchMap(filteredResults => 
+        this.simulateApiCall(filteredResults).pipe(
           catchError(error => {
             this.errorSearch = 'Search failed. Please try again.';
-            return of([]); 
+            return of([]);
           })
         )
       )
@@ -48,11 +50,15 @@ export class SearchComponent {
 
   fetchCombinedData() {
     this.loadingCombined = true;
-    const userDetails$ = this.simulateApiCall('User Details');
-    const userPosts$ = this.simulateApiCall('User Posts');
+
+    const userDetails$ = this.simulateApiCall(['John Doe - Staff']);
+    const userPosts$ = this.simulateApiCall(['Post 1: Welcome to the team', 'Post 2: Project Update']);
 
     combineLatest([userDetails$, userPosts$]).pipe(
-      map(([details, posts]) => `${details[0]} and ${posts[0]}`),
+      map(([details, posts]) => ({
+        userDetails: details[0],
+        userPosts: posts
+      })),
       catchError(error => {
         this.errorCombined = 'Failed to fetch combined data. Please try again.';
         return of(null);
@@ -63,19 +69,10 @@ export class SearchComponent {
     });
   }
 
-  private simulateApiCall(term: string): Observable<string[]> {
-    return of(this.candies.filter(candy => candy.toLowerCase().includes(term.toLowerCase()))).pipe(
-      tap(() => console.log(`API call for: ${term}`)),
-      debounceTime(500),
-      map(results => {
-        if (results.length === 0) {
-          throw new Error('No results found');
-        }
-        return results;
-      }),
-      catchError(() => {
-        return of(['No results found']); 
-      })
+  private simulateApiCall(data: string[]) {
+    return of(data).pipe(
+      tap(() => console.log('Simulated API call for:', data)),
+      debounceTime(500)
     );
   }
 }
