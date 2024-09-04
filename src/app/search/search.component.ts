@@ -23,9 +23,11 @@ export class SearchComponent {
   ];
 
   private userDetails = [
-    { name: 'John Doe', age: 30, job: 'Software Engineer' },
+    { name: 'Pazzoti Noriega', age: 30, job: 'Software Engineer' },
     { name: 'Jane Smith', age: 25, job: 'Graphic Designer' },
-    { name: 'Mary Johnson', age: 35, job: 'Project Manager' }
+    { name: 'Kabongo Honore', age: 50, job: 'Project Manager' },
+    { name: 'Kevin Durant', age: 34, job: 'Anaylist' },
+    { name: 'Chris Paul', age: 28, job: 'DevOps Engineer' }
   ];
 
   private userPosts = [
